@@ -1,0 +1,17 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'Build + Push'
+  entrypoint: 'sh'
+  args:
+  - '-c'
+  - |
+    docker pull gcr.io/cbd-test/test-app:build-push-deploy > /dev/null 2>&1
+    if [ $? -eq 0 ]; then
+      echo "gcr.io/cbd-test/test-app:build-push-deploy exists. Skipping build."
+    else
+      docker build -t gcr.io/cbd-test/test-app:build-push-deploy .
+    fi
+images:
+- 'gcr.io/cbd-test/test-app:build-push-deploy'
+
+tags: ['gcp-cloud-build-deploy', 'hello-app']
